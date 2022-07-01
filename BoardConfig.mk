@@ -7,6 +7,9 @@ TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := cortex-a53
 TARGET_USES_64_BIT_BINDER := true
 
+# Image
+BOARD_KERNEL_IMAGE_NAME := Image
+
 # Security patch level
 VENDOR_SECURITY_PATCH := 2021-04-01
 
