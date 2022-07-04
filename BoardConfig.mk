@@ -6,6 +6,7 @@ TARGET_CPU_ABI := armeabi-v7a
 TARGET_CPU_ABI2 := armeabi
 TARGET_CPU_VARIANT := cortex-a53
 TARGET_USES_64_BIT_BINDER := true
+ALLOW_MISSING_DEPENDENCIES := true
 
 # Bootloader
 BOARD_VENDOR := samsung
