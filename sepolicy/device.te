@@ -1,0 +1,12 @@
+# /dev/umts*
+type mif_device, dev_type;
+
+# /dev/block/mmcblk0p[0-9]
+type emmcblk_device, file_type;
+
+# gps
+type gps_device, dev_type;
+
+# bluetooth
+type bluetooth_device, dev_type;
+

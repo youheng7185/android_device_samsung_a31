@@ -1,0 +1,8 @@
+# /efs
+allow mediaserver efs_file:dir r_dir_perms;
+
+# Snap permissions
+allow mediaserver sensorservice_service:service_manager { find };
+allow mediaserver system_server:unix_stream_socket { read write };
+
+allow mediaserver ion_device:chr_file write;
