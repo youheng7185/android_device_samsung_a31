@@ -49,9 +49,15 @@ TARGET_RECOVERY_FSTAB := $(COMMON_PATH)/rootdir/etc/recovery.fstab
 TARGET_USERIMAGES_USE_EXT4 := true
 TARGET_USERIMAGES_SPARSE_EXT_DISABLED := false
 
+# Releasetools
+TARGET_RELEASETOOLS_EXTENSIONS := $(COMMON_PATH)/releasetools
+
 # SELinux
 BOARD_PLAT_PRIVATE_SEPOLICY_DIR += $(COMMON_PATH)/sepolicy/private
 BOARD_PLAT_PUBLIC_SEPOLICY_DIR += $(COMMON_PATH)/sepolicy/public
+
+# Symbols
+TARGET_LD_SHIM_LIBS := /system/lib/libshowlogo.so|libshim_showlogo.so
 
 # Network Routing
 TARGET_IGNORES_FTP_PPTP_CONNTRACK_FAILURE := true
@@ -88,6 +94,10 @@ BOARD_VNDK_VERSION := current
 
 # Vendor
 TARGET_COPY_OUT_VENDOR := vendor
+
+# Lineage hardware
+BOARD_HARDWARE_CLASS += \
+    $(COMMON_PATH)/lineagehw
 
 # DEX Pre-optimization
 ifeq ($(HOST_OS),linux)
