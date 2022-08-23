@@ -23,7 +23,7 @@ def AddImage(info, basename, dest):
 def OTA_InstallEnd(info):
   PatchVendor(info)
   info.script.Print("Patching firmware images...")
-  AddImage(info, "dtbo.img", "/dev/block/bootdevice/by-name/dtbo")
+  AddImage(info, "dtbo.img", "/dev/block/platform/bootdevice/by-name/dtbo")
   AddImage(info, "vbmeta.img", "/dev/block/platform/bootdevice/by-name/vbmeta")
 
 def PatchVendor(info):
