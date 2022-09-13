@@ -1,34 +1,37 @@
+#!/bin/env python3
+#
+# Copyright (C) 2021 The LineageOS Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import common
 import re
 
 def FullOTA_InstallEnd(info):
-    info.script.AppendExtra('mount("ext4", "EMMC", "/dev/block/platform/bootdevice/by-name/system", "/system_root");')
-    info.script.AppendExtra('run_program("/sbin/sed", "-i", "/fuseblk/d", "/system_root/system/etc/selinux/plat_sepolicy.cil");')
-    info.script.AppendExtra('unmount("/system_root");')
-    OTA_InstallEnd(info)
+  OTA_InstallEnd(info)
+  return
 
 def IncrementalOTA_InstallEnd(info):
   OTA_InstallEnd(info)
+  return
 
-def AddImage(info, basename, dest):
-  name = basename
-  path = "IMAGES/" + basename
-  if path not in info.input_zip.namelist():
-    return
-
-  data = info.input_zip.read(path)
-  common.ZipWriteStr(info.output_zip, name, data)
-  info.script.AppendExtra('package_extract_file("%s", "%s");' % (name, dest))
+def AddImage(info, dir, basename, dest):
+  data = info.input_zip.read(dir + "/" + basename)
+  common.ZipWriteStr(info.output_zip, basename, data)
+  info.script.Print("Patching {} image unconditionally...".format(dest.split('/')[-1]))
+  info.script.AppendExtra('package_extract_file("%s", "%s");' % (basename, dest))
 
 def OTA_InstallEnd(info):
-  PatchVendor(info)
-  info.script.Print("Patching firmware images...")
-  AddImage(info, "dtbo.img", "/dev/block/platform/bootdevice/by-name/dtbo")
-  AddImage(info, "vbmeta.img", "/dev/block/platform/bootdevice/by-name/vbmeta")
-
-def PatchVendor(info):
-  info.script.Print("Patching vendor init scripts...")
-  info.script.AppendExtra('mount("ext4", "EMMC", "/dev/block/platform/bootdevice/by-name/vendor", "/vendor");')
-  info.script.AppendExtra('run_program("/sbin/sed", "-i", "s/wait,check,quota/latemount,wait,check,quota/", "/vendor/etc/fstab.mt6765");')
-  info.script.AppendExtra('run_program("/sbin/sed", "-i", "s/fstab.mt6765$/fstab.mt6765 --early\\n    mount_all \/vendor\/etc\/fstab.mt6765 --late/", "/vendor/etc/init/hw/init.mt6765.rc");')
-  info.script.AppendExtra('unmount("/vendor");')
+  AddImage(info, "IMAGES", "dtbo.img", "/dev/block/by-name/dtbo")
+  AddImage(info, "IMAGES", "vbmeta.img", "/dev/block/by-name/vbmeta")
+  return
